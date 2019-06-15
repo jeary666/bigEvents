@@ -82,6 +82,12 @@
                 }
             });
 
+            //图片信息预览
+            $('#exampleInputFile').on('change',function() {
+                var icon = this.files[0];
+                var url = URL.createObjectURL(icon);
+                $('.user_pic').attr('src',url);
+            });
         });
     </script>
 
