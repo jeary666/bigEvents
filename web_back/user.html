@@ -73,7 +73,6 @@
                 url: 'http://localhost:8000/admin/userinfo_get',
                 type: 'get',
                 success: function (backData) {
-                    console.log(backData);
 
                     for (var key in backData.data) {
                         $('input.' + key).val(backData.data[key]);
@@ -88,6 +87,26 @@
                 var url = URL.createObjectURL(icon);
                 $('.user_pic').attr('src',url);
             });
+
+            //编辑用户信息
+            $('.btn-success').on('click',function(e) {
+                e.preventDefault();
+                var formData = new FormData($('form')[0]);
+                $.ajax({
+                url:'http://localhost:8000/admin/userinfo_edit',
+                type:'post',
+                dataType:'json',
+                data:formData,
+                processData: false,
+                contentType: false,
+                success: function(backData){
+                    if(backData.code == 200) {
+                        alert('修改成功');
+                    }
+                }
+                });
+            });
+
         });
     </script>
 
