@@ -163,6 +163,8 @@
             getCategory();
 
 
+
+
             //删除文章类别,通过委托的方式注册事件
             $('tbody').on('click', '.btn-del', function () {
                 var id = this.getAttribute('dataid');
@@ -196,7 +198,6 @@
                 $('#addModal').modal('show');
 
             });
-
 
             $('#btn-add').on('click', function () {
                 //点击新增分类样式还原
