@@ -89,6 +89,7 @@
                 </div>
                 <div class="modal-body">
                     <form>
+                        <input type="text" name="id" id="hide-input">
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">分类名称:</label>
                             <input type="text" class="form-control" id="name1">
@@ -114,7 +115,6 @@
         });
 
         $('#model_shutoff').click(function () {
-            alert('shutoff');
             $('#addModal').modal('hide');
         });
 
@@ -122,12 +122,12 @@
             $('#addModal').modal('hide');
         });
 
-        $('.category_table').delegate('a', 'click', function () {
-            if ($(this).hasClass('btn-info')) {
-                $('#addModal .modal-title').html('修改分类名称');
-                $('#addModal').modal('show');
-            }
-        })      
+        // $('.category_table').delegate('a', 'click', function () {
+        //     if ($(this).hasClass('btn-info')) {
+        //         $('#addModal .modal-title').html('修改分类名称');
+        //         $('#addModal').modal('show');
+        //     }
+        // })      
     </script>
 
     <script src="./js/template-web.js"></script>
@@ -137,8 +137,8 @@
             <td>{{$value.name}}</td>
             <td>{{$value.slug}}</td>
             <td class="text-center">
-                <a href="javascript:editTr({&quot;id&quot;:&quot;1&quot;,&quot;slug&quot;:&quot;uncategorized&quot;,&quot;name&quot;:&quot;未分类&quot;});" class="btn btn-info btn-xs">编辑</a>
-                <a href="javascript:deleteTr( 1 );" class="btn btn-danger btn-xs">删除</a>
+                <a href="javascript:void(0);" dataid="{{$value.id}}" class="btn btn-info btn-xs btn-edt">编辑</a>
+                <a href="javascript:void(0);" dataid="{{$value.id}}" class="btn btn-danger btn-xs btn-del">删除</a>
             </td>
             </tr>
         {{/each}}
@@ -183,6 +183,42 @@
                     }
                 });
             });
+
+            //删除文章类别,通过委托的方式注册事件
+            $('tbody').on('click', '.btn-del', function () {
+                var id = this.getAttribute('dataid');
+                $.ajax({
+                    url: 'http://localhost:8000/admin/category_delete ',
+                    type: 'post',
+                    data: {
+                        id: id
+                    },
+                    success: function (backData) {
+                        getCategory();
+                    }
+                });
+            });
+
+            //文章编辑输入框展示默认的分类名称和分类类别
+            $('tbody').on('click','.btn-edt',function() {
+                var id = $(this).attr('dataid');
+                //获取默认的分类名称和分类别名
+                var name = $(this).parent().prev().prev().text();
+                var slug = $(this).parent().prev().text();
+
+                // 设置默认的分类名称和分类别名以及id
+                $('#hide-input').val(id);
+                $('#name1').val(name);
+                $('#name2').val(slug);
+                
+                //显示保存按钮
+                $('#addModal .modal-title').html('修改分类名称');
+                $('#model_add').text('保存').addClass('btn-success');
+                $('#addModal').modal('show');
+
+            });
+            
+
         });
     </script>
 
